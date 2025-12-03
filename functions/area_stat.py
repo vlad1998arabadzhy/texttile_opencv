@@ -2,8 +2,8 @@ import pandas as pd
 
 FINAL_PATH= "/result/result.csv"
 OBJ_NUMBER = "Index"
-AREA_HEADER ='Area mm^2'
-COLUMNS = ["Size","Amount","Min. Area mm^2","Max. Area mm^2","Mean","Std","Mean+Std","CV", "Median"]
+AREA_HEADER ='Area mm^2.png'
+COLUMNS = ["Size","Amount","Min. Area mm^2.png","Max. Area mm^2.png","Mean","Std","Mean+Std","CV", "Median"]
 
 
 def calculate_mean(df:pd.Series):

@@ -1,7 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import pandas as pd
-from utils.area_stat import *
+from functions.area_stat import *
 import scipy.stats as stats
 EXAMPLE_PATH="/home/garuda/PycharmProjects/KI_1/area_sets/4_updated.csv"
 
@@ -30,7 +29,7 @@ def create_graph(ser:pd.Series, size:str):
         plt.hist(ser, bins=50, density=True, alpha=0.5, color='skyblue')
 
 
-    plt.xlabel("Square area mm**2")
+    plt.xlabel("Square area mm**2.png")
     plt.ylabel("Frequency")
     plt.title(size)
 

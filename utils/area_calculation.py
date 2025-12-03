@@ -48,7 +48,7 @@ def set_area(df:pd.DataFrame):
     new_column=[]
     for i in ls:
         new_column.append(round(i*K,2))
-    df["Area mm^2"]=new_column
+    df["Area mm^2.png"]=new_column
 
 def drop_irrelevant_columns(df:pd.DataFrame):
     df.drop(["Area (pixels)"], axis=1, inplace=True)
