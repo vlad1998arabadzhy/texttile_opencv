@@ -28,7 +28,7 @@ To apply main function should be called  traverse_datafolder()
 
 PIXELS_FOLDER="/home/garuda/PycharmProjects/KI_1/pixels" # Folder of the initial input dataset
 
-DATASETS_PATH = "/1/"#TODO seems broken
+DATASETS_PATH = "/home/garuda/PycharmProjects/KI_1/processed_img_features/"#TODO seems broken
 
 # Coefficient for convertion pixels to mm^2
 K= 0.0168662169
@@ -79,6 +79,7 @@ def extract_features(path):
     add_size_normalized(df)
     add_corners_normalization_to_df(df)
     add_width(df,labeled_image)
+    #TODO Height and Width are not correct. Either leave it in pixels or convert or find another way to convert data
     add_height(df,labeled_image)
     add_perfect_area(df)
     width_is_like_height(df)
@@ -86,7 +87,7 @@ def extract_features(path):
 
     pixels2milimeters(df)
     add_area_normalized(df)
-    #add_category_set(MODEL, df)#TODO uncomment after training of data
+    #add_category_set(MODEL, df)#TODO uncomment after training of training_data
     rename_columns(df)
 
 
@@ -170,9 +171,10 @@ def count_corners(mask, min_distance=3, threshold_rel=0.01):
 
 def pixels2milimeters(df:pd.DataFrame, headers:list=["area","perimeter","height","width"]):
     for header in headers:
-        df[header]=df[header].apply(lambda x: round(x*K,2))
-
-
+        if header == "area":
+            df[header]=df[header].apply(lambda x: round(x*K,2))
+        else:
+            df[header] = df[header].apply(lambda x: round(x * K**(1/2), 2))
 
 
 
@@ -204,6 +206,8 @@ def rename_columns(df:pd.DataFrame):
 def traverse_datafolder():
     for file in os.scandir(PIXELS_FOLDER):
         print(file.path)
+        #TODO Creates files from 0 to 9 , not from 1 to 10 in processed_img_features.
+        #TODO Fix before using Machine or rename 0.csv to 10.csv manually
         name = file.path[-1]
         create_df(file.path,name )
 

@@ -12,7 +12,7 @@ FILE_NAMES= [f"/home/garuda/PycharmProjects/KI_1/area_sets/{x}_updated.csv" for 
 
 def create_graph(ser:pd.Series, size:str):
     plt.figure(figsize=(10,5))
-    #My data
+    #My training_data
 
     if size == "1x1":
         plt.xlim([0,600])

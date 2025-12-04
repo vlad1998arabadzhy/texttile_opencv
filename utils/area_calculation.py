@@ -6,6 +6,10 @@ import threading
 
 from anyio import sleep
 
+#TODO Obsolete file.  To delete
+
+
+
 PIXEL_HEADER="Area (pixels)"
 
 K= 4210.72/249654

@@ -5,7 +5,7 @@ This file has functions tp create one unified 'result.csv' for files of extracte
 
 """
 
-FINAL_PATH= "/result/result.csv"
+FINAL_PATH= "/home/garuda/PycharmProjects/KI_1/result/result.csv"
 OBJ_NUMBER = "Index"
 AREA_HEADER ='Area mm^2.png'
 COLUMNS_AREA = ["Size","Amount","Min. Area mm^2","Max. Area mm^2.png","Mean","Std","Mean+Std","CV", "Median"]
@@ -40,10 +40,10 @@ def create_row(df:pd.DataFrame, name:str, target_feature:str):
         calculate_cv(ser),
         calculate_median(ser),
         #TODO NEW Need to update columns
-        count_categories_members(TRASH, df),
-        count_categories_members(TOO_BIG, df),
-        count_categories_members(TOO_SMALL,df),
-        count_categories_members(NORMAL,df)
+        # count_categories_members(TRASH, df),
+        # count_categories_members(TOO_BIG, df),
+        # count_categories_members(TOO_SMALL,df),
+        # count_categories_members(NORMAL,df)
     ]
 
     return [name, count]+stats
