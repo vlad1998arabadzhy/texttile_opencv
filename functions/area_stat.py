@@ -1,5 +1,10 @@
 import pandas as pd
 
+"""
+This file has functions tp create one unified 'result.csv' for files of extracted features like 
+
+"""
+
 FINAL_PATH= "/result/result.csv"
 OBJ_NUMBER = "Index"
 AREA_HEADER ='Area mm^2.png'
@@ -10,6 +15,11 @@ TRASH = "Trash"
 TOO_BIG = "Too big"
 TOO_SMALL = "Too small"
 NORMAL= "Normal"
+
+
+
+
+
 
 
 def calculate_mean(df:pd.Series):
@@ -59,6 +69,14 @@ def count_categories_members(category_name:str, df:pd.DataFrame):
 
 
 def process_all(names,rows, columns, target_feature):
+    """
+
+    :param names: List of .csv files of datasets with extracted features
+    :param rows: Rows represent sizes of cuts like [ "1x1", "2x2" ...]
+    :param columns: List of Names of each column("Standard deviation, CV etc.")
+    :param target_feature: A feature of dataset for which you build statistic(for example "area", or "perimeter")
+    :return:
+    """
     final_df = pd.DataFrame(columns=columns)
 
     for i in range (len(names)):
@@ -81,6 +99,19 @@ def calculate_median(ser:pd.Series):
 def calculate_std(ser:pd.Series):
     return ser.std()
 
-def to_final_df(df:pd.DataFrame, final_path):
+def to_final_df_csv(names, rows, columns, target_feature, final_path):
+    """
+
+    :param names: Names of files
+    :param rows:
+    :param columns:
+    :param target_feature:
+    :param final_path:
+    :return:
+    """
+    print("Start to process all .csv files")
+    df = process_all(names, rows, columns, target_feature)
+    print("\nFinish to process all .csv files")
     df.to_csv(final_path,index=False)
+    print("\nFile saved")
 

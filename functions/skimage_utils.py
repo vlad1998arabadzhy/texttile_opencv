@@ -7,15 +7,33 @@ from skimage.io import imread
 from skimage.measure import label, regionprops, regionprops_table
 from skimage.morphology import footprint_rectangle, closing, remove_small_objects
 from skimage.segmentation import clear_border
+from xgboost import XGBClassifier
+
 from functions.area_stat import  *
-from check_df import *
+from functions.check_df import *
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
-PIXELS_FOLDER="/home/garuda/PycharmProjects/KI_1/pixels"
-DATASETS_PATH = "/1/"
+
+
+
+
+"""
+This file has functions for image processing and feature extraction
+Main functionality func is extract features
+To apply main function should be called  traverse_datafolder()
+"""
+
+
+
+PIXELS_FOLDER="/home/garuda/PycharmProjects/KI_1/pixels" # Folder of the initial input dataset
+
+DATASETS_PATH = "/1/"#TODO seems broken
+
+# Coefficient for convertion pixels to mm^2
 K= 0.0168662169
-PROPS=['label', 'area','perimeter','solidity']
+
+PROPS=['label', 'area','perimeter','solidity']#TODO has to be updated according to output of extract features
 
 
 TRASH = "Trash"
@@ -25,8 +43,10 @@ NORMAL= "Normal"
 
 
 def add_category_set(model:XGBClassifier, df:pd.DataFrame):
-    df['category']=create_category_ser()
-def extract_features(path, path_to_save_image):
+    df['category']=create_category_ser(model,df)
+
+
+def extract_features(path):
 
     #Load
     img = imread(path)
@@ -51,6 +71,7 @@ def extract_features(path, path_to_save_image):
     regions = regionprops(labeled_image)
 
 #<----------------Add Features------------------->
+
     df = pd.DataFrame(props)
     add_corners_to_df(df,regions)
 
@@ -185,6 +206,7 @@ def traverse_datafolder():
         print(file.path)
         name = file.path[-1]
         create_df(file.path,name )
+
 def add_size(df:pd.DataFrame, path):
     size=path.replace(".png","").replace(PIXELS_FOLDER,"")[1]
     if(size=="0"):
@@ -202,6 +224,7 @@ def add_size_modified( path):
         size="10"
     else:
         size=size[0]
+    #Convert size from cm to mm.
     sizes = [int(size)*10 for x in range(2)]
     return sizes[0]
 

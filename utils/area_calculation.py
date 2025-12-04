@@ -52,8 +52,8 @@ def set_area(df:pd.DataFrame):
 
 def drop_irrelevant_columns(df:pd.DataFrame):
     df.drop(["Area (pixels)"], axis=1, inplace=True)
-    df.drop(["Object Number"], axis=1, inplace=True)
-    df.drop(["Index"], axis=1, inplace=True)
+    df.drop(["label"], axis=1, inplace=True)
+    df.drop(["solidity"], axis=1, inplace=True)
 
 def create_indexation(df:pd.DataFrame):
     ls = [x for x in range(1,(len(df))+1)]

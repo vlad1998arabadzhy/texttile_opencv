@@ -68,12 +68,12 @@ def save_model(model):
     print("Model saved")
 
 
-def load_model(model):
+def load_model(model:XGBClassifier):
     print("\nLoading the model:")
     model.load_model('model.xgb')
     print("Model loaded")
 
 
-save_model(model)
+#save_model(model)
 
 
