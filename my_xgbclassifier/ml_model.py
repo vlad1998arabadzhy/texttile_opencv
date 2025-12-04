@@ -62,12 +62,18 @@ print("\nClassidfication report:")
 print("\nConfusion Matrix:")
 print(confusion_matrix(y_test, y_pred))
 
+def save_model(model):
+    print("\nSaving the model:")
+    model.save_model('model.xgb')
+    print("Model saved")
 
-def predict_category(model, df:pd.DataFrame, index:int):
-    row = df.iloc[index]
-    return model.predict(row)
 
-def create_category_ser(model, df:pd.DataFrame):
-    ans = [predict_category(model, df, i) for i in range(len())]
+def load_model(model):
+    print("\nLoading the model:")
+    model.load_model('model.xgb')
+    print("Model loaded")
 
-    return pd.Series(ans)
+
+save_model(model)
+
+

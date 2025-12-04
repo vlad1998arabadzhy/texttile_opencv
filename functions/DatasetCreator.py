@@ -1,8 +1,8 @@
 from skimage_utils import *
 import pandas as pd
 
-PATH_TO_SAVE = "/home/garuda/PycharmProjects/KI_1/datasets_to_supervise/datasets2/"
-paths = [f'/home/garuda/PycharmProjects/KI_1/pixels/{x}/{x}.2.png' for x in range(1,11)]
+PATH_TO_SAVE = "/home/garuda/PycharmProjects/KI_1/datasets_to_supervise/4/"
+paths = [f'/home/garuda/PycharmProjects/KI_1/pixels/{x}/{x}.7.png' for x in range(1,11)]
 
 class DatasetCreator:
     def create_datasets(self, path_to_df:list):

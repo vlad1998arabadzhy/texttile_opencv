@@ -8,11 +8,12 @@ from skimage.measure import label, regionprops, regionprops_table
 from skimage.morphology import footprint_rectangle, closing, remove_small_objects
 from skimage.segmentation import clear_border
 from functions.area_stat import  *
+from check_df import *
 
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 PIXELS_FOLDER="/home/garuda/PycharmProjects/KI_1/pixels"
-DATASETS_PATH = "/datasets1/"
+DATASETS_PATH = "/1/"
 K= 0.0168662169
 PROPS=['label', 'area','perimeter','solidity']
 
@@ -23,12 +24,8 @@ TOO_SMALL = "Too small"
 NORMAL= "Normal"
 
 
-
-
-def prepare_image(img_path):
-    img = imread(img_path)
-
-
+def add_category_set(model:XGBClassifier, df:pd.DataFrame):
+    df['category']=create_category_ser()
 def extract_features(path, path_to_save_image):
 
     #Load
@@ -65,8 +62,10 @@ def extract_features(path, path_to_save_image):
     add_perfect_area(df)
     width_is_like_height(df)
 
+
     pixels2milimeters(df)
     add_area_normalized(df)
+    #add_category_set(MODEL, df)#TODO uncomment after training of data
     rename_columns(df)
 
 
@@ -111,10 +110,9 @@ def extract_features(path, path_to_save_image):
 
     ax.set_axis_off()
     plt.tight_layout()
-    plt.savefig(path_to_save_image+".png", format='png', bbox_inches='tight')
+    #plt.savefig(path_to_save_image+".png", format='png', bbox_inches='tight')# Needed only to create datasets for supervised ML
 
     plt.show()
-
 
 
 
@@ -175,8 +173,7 @@ def create_df(path, name:str):
 
 
 def width_is_like_height(df:pd.DataFrame):
-    ratio = df["width"]/df["height"]
-    df['width_to_height_ratio']= pd.Series((ratio>0.90) &  (ratio<1.10))
+    df['width_to_height_ratio'] = df["width"]/df["height"]
 
 def rename_columns(df:pd.DataFrame):
     df.rename(columns={"area":AREA_HEADER, "label":OBJ_NUMBER})

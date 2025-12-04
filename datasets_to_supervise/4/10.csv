@@ -1,0 +1,3 @@
+label,area,perimeter,solidity,corners,area_size,size_normalized,corners_normalized,width,height,perfect_area,width_to_height_ratio,area_normalized,category
+1,28626.17,158.97,0.9188638294163283,638,10,16972.49,15.95,27.48,24.66,100,1.1142270861833106,286.26169999999996,NO_CATEGORY
+2,5.84,4.5,0.3466933867735471,14,10,3.46,0.35,0.76,0.62,100,1.2162162162162162,0.0584,NO_CATEGORY

@@ -1,41 +1,16 @@
+from xgboost import XGBClassifier
+from my_xgbclassifier.ml_model import  *
 from skimage_utils import *
 
-
-def classify_pieces(df:pd.DataFrame):
-    ser = []
-    for index, row in df.iterrows():
-        if is_trash():
-            ser.append(TRASH)
-        elif is_too_big():
-            ser.append(TOO_BIG)
-        elif is_too_small():
-            ser.append(TOO_SMALL)
-        elif is_normal():
-            ser.append(NORMAL)
-    df['clssification']=pd.Series(ser)
+MODEL = load_model("/home/garuda/PycharmProjects/KI_1/my_xgbclassifier/model.xgb")
 
 
+def predict_category(model, df: pd.DataFrame, index: int):
+    row = df.iloc[index]
+    return model.predict(row)
 
 
-def df_checker(func):
-    def wrapper(df:pd.DataFrame,column):
-        for index, row in df.iterrows():
-            perimeter = row["perimeter"]
-            size_normalized = row['size_normalized']
-            corners_normalized = row['corners_normalized']
-            width_to_height_ratio = row['width_to_height_ratio']
-            area_normalized =row['area_normalized']
-            return func(perimeter, size_normalized, corners_normalized, width_to_height_ratio, area_normalized)
+def create_category_ser(model: XGBClassifier, df: pd.DataFrame)->pd.Series:
+    ans = [predict_category(model, df, i)[0] for i in range(len(df))]
 
-@df_checker
-def is_too_small(perimeter, size_normalized, corners_normalized, width_to_height_ratio, area_normalized):
-    return area_normalized < 0.70
-@df_checker
-def is_too_big(perimeter, size_normalized, corners_normalized, width_to_height_ratio, area_normalized):
-    return area_normalized > 1.25
-@df_checker
-def is_trash(perimeter, size_normalized, corners_normalized, width_to_height_ratio, area_normalized):
-    return
-@df_checker
-def is_normal(perimeter, size_normalized, corners_normalized, width_to_height_ratio, area_normalized):
-    return
+    return pd.Series(ans)
