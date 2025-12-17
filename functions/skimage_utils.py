@@ -1,5 +1,6 @@
 import os
 
+from imageio.v2 import imsave
 from skimage.color import label2rgb, rgb2gray, rgba2rgb
 from skimage.feature import corner_harris, corner_peaks
 from skimage.filters import threshold_otsu
@@ -8,7 +9,7 @@ from skimage.measure import label, regionprops, regionprops_table
 from skimage.morphology import footprint_rectangle, closing, remove_small_objects
 from skimage.segmentation import clear_border
 from xgboost import XGBClassifier
-
+import shutil
 from functions.area_stat import  *
 from functions.check_df import *
 
@@ -28,7 +29,7 @@ To apply main function should be called  traverse_datafolder()
 
 PIXELS_FOLDER="/home/garuda/PycharmProjects/KI_1/pixels" # Folder of the initial input dataset
 
-DATASETS_PATH = "/home/garuda/PycharmProjects/KI_1/processed_img_features/"#TODO seems broken
+DATASETS_PATH = "/home/garuda/PycharmProjects/KI_1/processed_img_features/"
 
 # Coefficient for convertion pixels to mm^2
 K= 0.0168662169
@@ -46,10 +47,11 @@ def add_category_set(model:XGBClassifier, df:pd.DataFrame):
     df['category']=create_category_ser(model,df)
 
 
-def extract_features(path):
+def extract_features(path, path_to_save_image=None):
 
     #Load
     img = imread(path)
+    #shutil.copy(path, path_to_save_image)#TODO needed for creating datasets for Supervised Learning
 
     img = rgba2rgb(img)
 
@@ -87,54 +89,54 @@ def extract_features(path):
 
     pixels2milimeters(df)
     add_area_normalized(df)
-    #add_category_set(MODEL, df)#TODO uncomment after training of training_data
+    #add_category_set(MODEL, df)#TODO uncomment after training of model
     rename_columns(df)
 
 
 #<------------------------Display processed image--------------------->
 
     image_label_overlay = label2rgb(labeled_image, image=img, bg_label=0)
-    fig, ax = plt.subplots(figsize=(10, 6))
-    ax.imshow(image_label_overlay)
+    # fig, ax = plt.subplots(figsize=(10, 6))
+    # ax.imshow(image_label_overlay)
+    #
+    #
+    #
+    # for region in regionprops(labeled_image):
+    #     # take regions with large enough areas
+    #     if region.area >= 100:
+    #         # draw rectangle around segmented coins
+    #         minr, minc, maxr, maxc = region.bbox
+    #         height = maxr - minr
+    #         width = maxc - minc
+    #
+    #         rect = mpatches.Rectangle(
+    #             (minc, minr),
+    #             maxc - minc,
+    #             maxr - minr,
+    #             fill=False,
+    #             edgecolor='red',
+    #             linewidth=2,
+    #         )
+    #         ax.add_patch(rect)
+    #         ax.text(
+    #             minc,  # x
+    #             minr ,  # y (чуть выше прямоугольника)
+    #             f"ID {region.label}",  # текст
+    #             color='yellow',
+    #             fontsize=8,
+    #             fontweight='bold',
+    #             bbox=dict(
+    #                 facecolor='black',
+    #                 alpha=0.5,
+    #                 edgecolor='none'
+    #             )
+    #         )
+    #
+    # ax.set_axis_off()
+    # plt.tight_layout()
+    #plt.savefig(path_to_save_image+".png", format='png', bbox_inches='tight')# TODO Needed only to create datasets for supervised ML
 
-
-
-    for region in regionprops(labeled_image):
-        # take regions with large enough areas
-        if region.area >= 100:
-            # draw rectangle around segmented coins
-            minr, minc, maxr, maxc = region.bbox
-            height = maxr - minr
-            width = maxc - minc
-
-            rect = mpatches.Rectangle(
-                (minc, minr),
-                maxc - minc,
-                maxr - minr,
-                fill=False,
-                edgecolor='red',
-                linewidth=2,
-            )
-            ax.add_patch(rect)
-            ax.text(
-                minc,  # x
-                minr ,  # y (чуть выше прямоугольника)
-                f"ID {region.label}",  # текст
-                color='yellow',
-                fontsize=8,
-                fontweight='bold',
-                bbox=dict(
-                    facecolor='black',
-                    alpha=0.5,
-                    edgecolor='none'
-                )
-            )
-
-    ax.set_axis_off()
-    plt.tight_layout()
-    #plt.savefig(path_to_save_image+".png", format='png', bbox_inches='tight')# Needed only to create datasets for supervised ML
-
-    plt.show()
+   # plt.show()
 
 
 
@@ -207,14 +209,20 @@ def traverse_datafolder():
     for file in os.scandir(PIXELS_FOLDER):
         print(file.path)
         #TODO Creates files from 0 to 9 , not from 1 to 10 in processed_img_features.
-        #TODO Fix before using Machine or rename 0.csv to 10.csv manually
+        #TODO Fix before using Machine or rename 10.csv to 10.csv manually
         name = file.path[-1]
         create_df(file.path,name )
 
 def add_size(df:pd.DataFrame, path):
-    size=path.replace(".png","").replace(PIXELS_FOLDER,"")[1]
-    if(size=="0"):
+    #TODO this returns size 1 for but has to be 100
+    size=path.replace(".png","").replace(PIXELS_FOLDER+"/","")
+    if size.startswith("1") and not size.startswith("10"):
+        size="1"
+    elif size.startswith("10"):
         size="10"
+    else:
+        size=size[0]
+
     sizes = [int(size)*10 for x in range(len(df))]
     df["area_size"]= pd.Series(sizes)
 
@@ -241,3 +249,5 @@ def add_perfect_area(df:pd.DataFrame):
 
 def add_area_normalized(df:pd.DataFrame):
     df['area_normalized']=df['area']/df['perfect_area']
+
+

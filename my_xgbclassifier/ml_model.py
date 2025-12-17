@@ -63,6 +63,7 @@ try:
     print(confusion_matrix(y_test, y_pred))
 except:
     print("\nError occured")
+    print("You still have only one class. Gradient Boosting Classifier requires at least two")
 def save_model(model):
     print("\nSaving the model:")
     model.save_model('model.xgb')

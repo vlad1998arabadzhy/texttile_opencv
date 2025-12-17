@@ -1,8 +1,8 @@
 from skimage_utils import *
 import pandas as pd
 
-PATH_TO_SAVE = "/home/garuda/PycharmProjects/KI_1/datasets_to_supervise/2/"
-paths = [f'/home/garuda/PycharmProjects/KI_1/pixels/{x}/{x}.2.png' for x in range(1,11)]
+PATH_TO_SAVE = "/home/garuda/PycharmProjects/KI_1/datasets_to_supervise/4/"
+paths = [f'/home/garuda/PycharmProjects/KI_1/pixels/{x}/{x}.7.png' for x in range(1,11)]
 
 class DatasetCreator:
     """
@@ -18,10 +18,12 @@ class DatasetCreator:
             i+=1
 
     def create_dataset_for_supervised_ml(self, path_of_data, path_to_save, index):
-        df= extract_features(path_of_data)
+        df= extract_features(path_of_data, path_to_save)
         ser = pd.Series(["NO_CATEGORY" for x in range(len(df))])
         df['category'] = ser
         df.to_csv((path_to_save+index+".csv"), index=False)
+
+
 
 dataset = DatasetCreator()
 dataset.create_datasets(paths)
