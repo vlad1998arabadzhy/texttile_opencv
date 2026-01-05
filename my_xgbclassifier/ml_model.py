@@ -48,10 +48,12 @@ def save_model(model):
     print("Model saved")
 
 
-def load_model(model:XGBClassifier):
+def load_model(path:str)-> XGBClassifier:
+    model = XGBClassifier()
     print("\nLoading the model:")
-    model.load_model('model_v1.xgb')
-    print("Model loaded")
+    model.load_model(path)
+    print("\nModel was loaded")
+    return model
 
 
 

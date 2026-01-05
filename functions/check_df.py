@@ -2,7 +2,7 @@ from xgboost import XGBClassifier
 from my_xgbclassifier.ml_model import  *
 from functions.skimage_utils import *
 
-MODEL = XGBClassifier()#load_model("/home/garuda/PycharmProjects/KI_1/my_xgbclassifier/model_v1.xgb") #TODO when model is ready -- change
+MODEL = load_model("/home/garuda/PycharmProjects/KI_1/my_xgbclassifier/model_v1.xgb") #TODO when model is ready -- change
 
 
 def predict_category(model, df: pd.DataFrame, index: int):

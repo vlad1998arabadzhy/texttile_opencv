@@ -81,7 +81,6 @@ def extract_features(path, path_to_save_image=None):
     add_size_normalized(df)
     add_corners_normalization_to_df(df)
     add_width(df,labeled_image)
-    #TODO Height and Width are not correct. Either leave it in pixels or convert or find another way to convert data
     add_height(df,labeled_image)
     add_perfect_area(df)
     width_is_like_height(df)
@@ -89,7 +88,7 @@ def extract_features(path, path_to_save_image=None):
 
     pixels2milimeters(df)
     add_area_normalized(df)
-    #add_category_set(MODEL, df)#TODO uncomment after training of model
+    add_category_set(MODEL, df)#TODO uncomment after training of model
     rename_columns(df)
 
 
